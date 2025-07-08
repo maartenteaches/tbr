@@ -43,7 +43,7 @@ program define tbr, rclass
 end
 
 program define Comp, rclass 
-	syntax varname(numeric) [if] [aw], INCome(varname numeric) 
+	syntax varname(numeric) [if] [pw], INCome(varname numeric) 
 	marksample touse
 	if "`weight'" != ""	{
 		local wght = "[`weight' `exp']"
