@@ -21,7 +21,7 @@ easiest way to install this is using E. F. Haghish's
 that, you can install `tbr` by typing in Stata: 
 `github install maartenteaches/tbr`. Alternatively, `tbr` can be 
 installed without the `github` command by typing in Stata 
-`net install decomph, from("https://raw.githubusercontent.com/maartenteaches/tbr/main")`.
+`net install tbr, from("https://raw.githubusercontent.com/maartenteaches/tbr/main")`.
 
 
 Author
