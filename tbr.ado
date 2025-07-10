@@ -11,6 +11,7 @@ program define tbr, rclass
 	if "`over'" == "" {
 		Comp `varlist' if `touse' `wght', income(`income')
 		display as txt "The top-bottom ratio is " as result %9.3f r(tbr)
+		return scalar tbr = r(tbr)
 	}
 	else {
 		markout `touse' `over'
@@ -33,7 +34,10 @@ program define tbr, rclass
 		foreach lev of local levs {
 			Comp `varlist' if `touse' & `over' == `lev' `wght', income(`income')
 			matrix `res'[`i++',1] = r(tbr)
-			local rownames = "`rownames' `: label (`over') `lev''"
+			local rowname : label (`over') `lev' 32
+			local rowname : list retokenize rowname
+			local rowname : subinstr local rowname ":" ";", all
+			local rownames = `"`rownames' "`rowname'""'
 		}
 		matrix rownames `res' = `rownames'
 		matrix colnames `res' = "tbr"
@@ -45,15 +49,16 @@ end
 program define Comp, rclass 
 	syntax varname(numeric) [if] [pw], INCome(varname numeric) 
 	marksample touse
+
 	if "`weight'" != ""	{
 		local wght = "[`weight' `exp']"
 		local awght = "[aw `exp']"
 	}
 	
-	tempname l h
+	tempname l h low high
 	_pctile `income' `wght' if `touse', percentiles(10 90)
-	local low = r(r1)
-	local high = r(r2)
+	scalar `low' = r(r1)
+	scalar `high' = r(r2)
 	
 	sum `varlist' `awght' if `touse' & `income' <= `low', meanonly
 	scalar `l' = r(mean)
